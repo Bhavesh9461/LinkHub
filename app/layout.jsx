@@ -1,6 +1,6 @@
 import { Orbitron, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import {config}  from "@/data/config";
+import { config } from "@/data/config";
 import AppLoader from "@/components/ui/AppLoader";
 import BackgroundVideo from "@/components/ui/BackgroundVideo";
 import ToasterProvider from "@/components/ui/ToasterProvider";
@@ -34,21 +34,33 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#080b18",
+  themeColor: "#34d399",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="en"
+      className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+    >
       <head>
         <link rel="preload" href="/video/bg.mp4" as="video" type="video/mp4" />
-        <link rel="preload" href="/images/bg.jpeg" as="image" type="image/jpeg" />  
+        <link
+          rel="preload"
+          href="/images/bg.jpeg"
+          as="image"
+          type="image/jpeg"
+        />
       </head>
-      <body className="no-select relative min-h-dvh overflow-x-hidden antialiased">
+      <body className="no-select h-[100svh] overflow-hidden antialiased">
         <AppLoader>
-          <BackgroundVideo />
-          <div className="relative z-10 min-h-dvh">{children}</div>
+          <div className="relative h-[100svh] overflow-y-auto overflow-x-hidden">
+            <BackgroundVideo />
+
+            <div className="relative z-10 min-h-full">{children}</div>
+          </div>
         </AppLoader>
+
         <ToasterProvider />
       </body>
     </html>
