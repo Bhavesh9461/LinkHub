@@ -1,0 +1,156 @@
+@import "tailwindcss";
+@import "remixicon/fonts/remixicon.css";
+
+/*
+  Design tokens — single source of truth for the whole app.
+  Palette: near-black navy base, violet -> sky-blue signature gradient,
+  glass-panel surfaces. Keep every color reference flowing through these.
+*/
+@theme {
+  --font-display: var(--font-orbitron), sans-serif;
+  --font-body: var(--font-space-grotesk), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  --color-bg: #05060a;
+  --color-surface: #0e1120;
+  --color-surface-2: #131729;
+  --color-border: #232842;
+  --color-violet: #8b5cf6;
+  --color-blue: #38bdf8;
+  --color-pink: #ec4899;
+  --color-text: #f3f4f6;
+  --color-muted: #9aa0b4;
+  --color-online: #34d399;
+
+  --radius-card: 1rem;
+  --radius-pill: 999px;
+
+  /* Consistent control sizing — every button/pill in the app uses these */
+  --size-btn-h: 2.5rem; /* 40px */
+  --size-btn-h-sm: 2.25rem; /* 36px */
+  --size-icon: 2.5rem; /* 40px avatar-in-card icon box */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+/* App-wide: nothing on this page should be selectable/draggable like text */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-violet) 40%, transparent);
+  color: #fff;
+}
+
+/* Slim, on-brand scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-violet);
+}
+
+/* Reduced motion respected app-wide */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visible keyboard focus everywhere, on brand */
+:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Signature: animated conic gradient ring around the avatar */
+@property --ring-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.avatar-ring {
+  background: conic-gradient(
+    from var(--ring-angle),
+    var(--color-blue),
+    var(--color-violet),
+    var(--color-pink),
+    var(--color-blue)
+  );
+  animation: spin-ring 6s linear infinite;
+}
+
+@keyframes spin-ring {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-ring {
+    animation: none;
+  }
+}
+
+/* Card hover sheen sweep */
+.card-sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    color-mix(in srgb, var(--color-blue) 70%, transparent),
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card-sheen:hover::before {
+  opacity: 1;
+  background-position: 100% 100%;
+  transition: opacity 0.3s ease, background-position 0.8s ease;
+}
+
+.glass {
+  background: color-mix(in srgb, var(--color-surface) 78%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--color-border);
+}

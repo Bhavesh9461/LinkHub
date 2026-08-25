@@ -1,0 +1,56 @@
+import { Orbitron, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
+import {config}  from "@/data/config";
+import AppLoader from "@/components/ui/AppLoader";
+import BackgroundVideo from "@/components/ui/BackgroundVideo";
+import ToasterProvider from "@/components/ui/ToasterProvider";
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-orbitron",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+export const metadata = {
+  title: config.siteName,
+  description: config.siteDescription,
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#05060a",
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        <link rel="preload" href="/video/bg.mp4" as="video" type="video/mp4" />
+        <link rel="preload" href="/images/bg.jpeg" as="image" type="image/jpeg" />
+      </head>
+      <body className="no-select relative min-h-dvh overflow-x-hidden antialiased">
+        <AppLoader>
+          <BackgroundVideo />
+          <div className="relative z-10 min-h-dvh">{children}</div>
+        </AppLoader>
+        <ToasterProvider />
+      </body>
+    </html>
+  );
+}
