@@ -37,7 +37,7 @@ export default function BackgroundVideo() {
       {!failed && (
         <video
           ref={videoRef}
-           className="fixed left-1/2 top-1/2 h-[100dvh] w-full max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
+           className="fixed left-1/2 top-1/2 w-full max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
           autoPlay
           muted
           loop
