@@ -30,14 +30,14 @@ export default function BackgroundVideo() {
   }, [reportVideo]);
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-(--color-bg)">
+    <div className="fixed inset-0 z-0 h-dvh w-full overflow-hidden bg-(--color-bg)">
       {/* Base gradient — always present, fills the letterbox gaps and doubles as the fallback if video fails */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#151a34_0%,_#05060a_60%)]" />
 
       {!failed && (
         <video
           ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute left-0 top-0 h-dvh w-full object-cover"
           autoPlay
           muted
           loop
