@@ -36,16 +36,18 @@ export default function BackgroundVideo() {
 
   return (
     <div
+      aria-hidden="true"
       className="
         fixed
-        inset-x-0
-        top-0
+        inset-0
         z-0
         h-[100lvh]
         w-full
         overflow-hidden
         bg-(--color-bg)
         pointer-events-none
+        select-none
+        touch-none
       "
     >
       {/* Base background */}
@@ -53,6 +55,8 @@ export default function BackgroundVideo() {
         className="
           absolute
           inset-0
+          select-none
+          pointer-events-none
           bg-[radial-gradient(ellipse_at_top,_#151a34_0%,_#05060a_60%)]
         "
       />
@@ -63,10 +67,14 @@ export default function BackgroundVideo() {
           className="
             absolute
             inset-0
+            block
             h-full
             w-full
             object-cover
             object-center
+            select-none
+            pointer-events-none
+            touch-none
           "
           autoPlay
           muted
@@ -74,6 +82,9 @@ export default function BackgroundVideo() {
           playsInline
           preload="auto"
           poster="/images/bg-poster.jpg"
+          draggable={false}
+          disablePictureInPicture
+          controls={false}
         >
           <source src="/video/bg.mp4" type="video/mp4" />
         </video>
@@ -84,6 +95,7 @@ export default function BackgroundVideo() {
         className="
           absolute
           inset-0
+          pointer-events-none
           bg-[linear-gradient(180deg,rgba(5,6,10,0.55)_0%,rgba(5,6,10,0.75)_45%,rgba(5,6,10,0.92)_100%)]
         "
       />
@@ -93,6 +105,7 @@ export default function BackgroundVideo() {
         className="
           absolute
           inset-0
+          pointer-events-none
           bg-[radial-gradient(circle_at_15%_10%,rgba(139,92,246,0.18),transparent_45%),radial-gradient(circle_at_85%_15%,rgba(56,189,248,0.16),transparent_45%)]
         "
       />
