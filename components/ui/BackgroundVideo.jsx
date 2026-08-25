@@ -12,7 +12,10 @@ export default function BackgroundVideo() {
     const video = videoRef.current;
     if (!video) return;
 
-    const handleReady = () => reportVideo("ready");
+    const handleReady = () => {
+      reportVideo("ready");
+    };
+
     const handleError = () => {
       setFailed(true);
       reportVideo("error");
@@ -21,7 +24,9 @@ export default function BackgroundVideo() {
     video.addEventListener("canplaythrough", handleReady);
     video.addEventListener("error", handleError);
 
-    if (video.readyState >= 3) handleReady();
+    if (video.readyState >= 3) {
+      handleReady();
+    }
 
     return () => {
       video.removeEventListener("canplaythrough", handleReady);
@@ -31,13 +36,25 @@ export default function BackgroundVideo() {
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-(--color-bg)">
-      {/* Base gradient — always present, fills the letterbox gaps and doubles as the fallback if video fails */}
+      {/* Base gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#151a34_0%,_#05060a_60%)]" />
 
       {!failed && (
         <video
           ref={videoRef}
-           className="fixed left-1/2 top-1/2 w-full max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
+          className="
+            absolute
+            left-1/2
+            top-1/2
+            min-h-full
+            min-w-full
+            h-auto
+            w-auto
+            max-w-none
+            -translate-x-1/2
+            -translate-y-1/2
+            object-cover
+          "
           autoPlay
           muted
           loop
@@ -49,8 +66,10 @@ export default function BackgroundVideo() {
         </video>
       )}
 
-      {/* Consistent scrim so cards always read clearly over any footage */}
+      {/* Consistent scrim */}
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,6,10,0.55)_0%,rgba(5,6,10,0.75)_45%,rgba(5,6,10,0.92)_100%)]" />
+
+      {/* Ambient colors */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(139,92,246,0.18),transparent_45%),radial-gradient(circle_at_85%_15%,rgba(56,189,248,0.16),transparent_45%)]" />
     </div>
   );
