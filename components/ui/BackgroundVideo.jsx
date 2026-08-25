@@ -35,25 +35,38 @@ export default function BackgroundVideo() {
   }, [reportVideo]);
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-(--color-bg)">
-      {/* Base gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#151a34_0%,_#05060a_60%)]" />
+    <div
+      className="
+        fixed
+        inset-x-0
+        top-0
+        z-0
+        h-[100lvh]
+        w-full
+        overflow-hidden
+        bg-(--color-bg)
+        pointer-events-none
+      "
+    >
+      {/* Base background */}
+      <div
+        className="
+          absolute
+          inset-0
+          bg-[radial-gradient(ellipse_at_top,_#151a34_0%,_#05060a_60%)]
+        "
+      />
 
       {!failed && (
         <video
           ref={videoRef}
           className="
             absolute
-            left-1/2
-            top-1/2
-            min-h-full
-            min-w-full
-            h-auto
-            w-auto
-            max-w-none
-            -translate-x-1/2
-            -translate-y-1/2
+            inset-0
+            h-full
+            w-full
             object-cover
+            object-center
           "
           autoPlay
           muted
@@ -66,11 +79,23 @@ export default function BackgroundVideo() {
         </video>
       )}
 
-      {/* Consistent scrim */}
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,6,10,0.55)_0%,rgba(5,6,10,0.75)_45%,rgba(5,6,10,0.92)_100%)]" />
+      {/* Main scrim */}
+      <div
+        className="
+          absolute
+          inset-0
+          bg-[linear-gradient(180deg,rgba(5,6,10,0.55)_0%,rgba(5,6,10,0.75)_45%,rgba(5,6,10,0.92)_100%)]
+        "
+      />
 
       {/* Ambient colors */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(139,92,246,0.18),transparent_45%),radial-gradient(circle_at_85%_15%,rgba(56,189,248,0.16),transparent_45%)]" />
+      <div
+        className="
+          absolute
+          inset-0
+          bg-[radial-gradient(circle_at_15%_10%,rgba(139,92,246,0.18),transparent_45%),radial-gradient(circle_at_85%_15%,rgba(56,189,248,0.16),transparent_45%)]
+        "
+      />
     </div>
   );
 }
