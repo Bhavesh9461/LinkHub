@@ -34,7 +34,7 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#05060a",
+  themeColor: "#080b18",
 };
 
 export default function RootLayout({ children }) {
@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link rel="preload" href="/video/bg.mp4" as="video" type="video/mp4" />
-        <link rel="preload" href="/images/bg.jpeg" as="image" type="image/jpeg" />
+        <link rel="preload" href="/images/bg.jpeg" as="image" type="image/jpeg" />  
       </head>
       <body className="no-select relative min-h-dvh overflow-x-hidden antialiased">
         <AppLoader>
