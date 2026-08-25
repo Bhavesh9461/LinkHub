@@ -27,8 +27,52 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: config.siteName,
+  metadataBase: new URL("https://linkhub-ten-indol.vercel.app/"),
+
+  title: {
+    default: config.siteName,
+    template: `%s | ${config.siteName}`,
+  },
+
   description: config.siteDescription,
+
+  icons: {
+    icon: [
+      {
+        url: "/iconlogo.png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/iconlogo-dark.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+    apple: "/iconlogo.png",
+    shortcut: "/iconlogo.png",
+  },
+
+  openGraph: {
+    title: config.siteName,
+    description: config.siteDescription,
+    url: "/",
+    siteName: config.siteName,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Bhavesh Kumar — All My Links",
+      },
+    ],
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: config.siteName,
+    description: config.siteDescription,
+    images: ["/og-image.png"],
+  },
 };
 
 export const viewport = {
@@ -47,7 +91,7 @@ export default function RootLayout({ children }) {
         <link rel="preload" href="/video/bg.mp4" as="video" type="video/mp4" />
         <link
           rel="preload"
-          href="/images/bg.jpeg"
+          href="/images/mypic.jpeg"
           as="image"
           type="image/jpeg"
         />
