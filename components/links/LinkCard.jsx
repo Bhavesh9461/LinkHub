@@ -4,19 +4,35 @@ import IconImage from "@/components/ui/IconImage";
 import { copyToClipboard } from "@/lib/clipboard";
 
 export default function LinkCard({ link }) {
-  const { id, name, description, hasLink, url, copyValue } = link;
+  const {
+    name,
+    description,
+    hasLink,
+    url,
+    copyValue,
+    iconType,
+    iconUrl,
+    iconName,
+  } = link;
 
   return (
     <article className="card-sheen glass relative flex h-full flex-col gap-4 rounded-(--radius-card) p-5 transition-transform duration-300 hover:-translate-y-0.5">
       <div className="flex items-start gap-3">
         <span className="flex h-(--size-icon) w-(--size-icon) shrink-0 items-center justify-center rounded-xl border border-(--color-border) bg-(--color-surface-2)">
-          <IconImage id={id} size={22} />
+          <IconImage
+            iconType={iconType}
+            iconUrl={iconUrl}
+            iconName={iconName}
+            size={22}
+          />
         </span>
         <div className="min-w-0">
           <h3 className="truncate font-(family-name:--font-display) text-[0.95rem] font-semibold text-(--color-text)">
             {name}
           </h3>
-          <p className="mt-0.5 line-clamp-2 text-xs text-(--color-muted)">{description}</p>
+          <p className="mt-0.5 line-clamp-2 text-xs text-(--color-muted)">
+            {description}
+          </p>
         </div>
       </div>
 

@@ -1,9 +1,10 @@
+import Link from "next/link";
 import Avatar from "@/components/profile/Avatar";
 import { profile } from "@/data/profile";
 
 export default function ProfileHeader() {
   return (
-    <section className="flex flex-col items-center gap-5 px-4 pb-10 pt-8 text-center sm:pt-10">
+    <section className="flex flex-col items-center gap-5 px-4 pb-8 pt-8 text-center sm:pt-10">
       <Avatar src={profile.avatarSrc} name={profile.name} online={profile.online} />
 
       <div className="flex flex-col items-center gap-2.5">
@@ -30,6 +31,14 @@ export default function ProfileHeader() {
           <span aria-hidden="true">{profile.statusEmoji}</span>
         </span>
       </div>
+
+      <Link
+        href="/private-links"
+        className="glass mt-1 inline-flex h-(--size-btn-h-sm) items-center gap-2 rounded-(--radius-pill) px-4 text-xs font-medium text-(--color-muted) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
+      >
+        <i className="ri-lock-line text-sm" aria-hidden="true" />
+        Unaccessable Links
+      </Link>
     </section>
   );
 }
