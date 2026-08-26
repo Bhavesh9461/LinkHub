@@ -10,6 +10,15 @@ export const links = [
     copyValue: "https://www.bhaveshdev.pro/",
   },
   {
+    id: "locknest",
+    name: "LockNest",
+    description: "Personal app - SignUp is not allowed.",
+    show: true,
+    hasLink: true,
+    url: "https://lock-nest-mu.vercel.app/",
+    copyValue: "https://lock-nest-mu.vercel.app/",
+  },
+  {
     id: "instagram",
     name: "Instagram",
     description: "Life updates & behind the scenes",
