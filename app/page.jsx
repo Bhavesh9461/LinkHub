@@ -4,6 +4,8 @@ import LinksGrid from "@/components/links/LinksGrid";
 import Footer from "@/components/layout/Footer";
 import { getPublicLinks } from "@/lib/getLinks";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const links = await getPublicLinks();
   
