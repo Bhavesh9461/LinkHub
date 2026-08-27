@@ -3,6 +3,8 @@ import ProjectsGrid from "@/components/links/ProjectsGrid";
 import ManageLinksButton from "@/components/links/ManageLinksButton";
 import { getPrivateProjects } from "@/lib/getLinks";
 
+export const dynamic = "force-dynamic";
+
 export default async function PrivateProjectsPage() {
   const projects = await getPrivateProjects();
 

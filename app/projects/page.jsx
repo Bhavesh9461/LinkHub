@@ -2,6 +2,8 @@ import Link from "next/link";
 import ProjectsGrid from "@/components/links/ProjectsGrid";
 import { getPublicProjects } from "@/lib/getLinks";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
   const projects = await getPublicProjects();
 

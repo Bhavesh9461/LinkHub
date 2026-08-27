@@ -4,6 +4,8 @@ import ManageLinksButton from "@/components/links/ManageLinksButton";
 import ProjectsNavButton from "@/components/links/ProjectsNavButton";
 import { getPrivateVisibleLinks } from "@/lib/getLinks";
 
+export const dynamic = "force-dynamic";
+
 export default async function PrivateLinksPage() {
   const links = await getPrivateVisibleLinks();
 
