@@ -37,7 +37,7 @@ export default function ProfileHeader() {
           href="/projects"
           className="glass inline-flex h-(--size-btn-h-sm) items-center gap-2 rounded-(--radius-pill) px-4 text-xs font-medium text-(--color-muted) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
         >
-          <i className="ri-folder-code-line text-sm" aria-hidden="true" />
+          <i className="ri-folder-line text-sm" aria-hidden="true" />
           Projects
         </Link>
         <Link
