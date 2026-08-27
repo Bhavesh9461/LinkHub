@@ -1,9 +1,10 @@
+import Link from "next/link";
 import Avatar from "@/components/profile/Avatar";
 import { profile } from "@/data/profile";
 
 export default function ProfileHeader() {
   return (
-    <section className="flex flex-col items-center gap-5 px-4 pb-10 pt-8 text-center sm:pt-10">
+    <section className="flex flex-col items-center gap-5 px-4 pb-8 pt-8 text-center sm:pt-10">
       <Avatar src={profile.avatarSrc} name={profile.name} online={profile.online} />
 
       <div className="flex flex-col items-center gap-2.5">
@@ -29,6 +30,23 @@ export default function ProfileHeader() {
           {profile.status}
           <span aria-hidden="true">{profile.statusEmoji}</span>
         </span>
+      </div>
+
+      <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
+        <Link
+          href="/projects"
+          className="glass inline-flex h-(--size-btn-h-sm) items-center gap-2 rounded-(--radius-pill) px-4 text-xs font-medium text-(--color-muted) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
+        >
+          <i className="ri-folder-code-line text-sm" aria-hidden="true" />
+          Projects
+        </Link>
+        <Link
+          href="/private-links"
+          className="glass inline-flex h-(--size-btn-h-sm) items-center gap-2 rounded-(--radius-pill) px-4 text-xs font-medium text-(--color-muted) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
+        >
+          <i className="ri-lock-line text-sm" aria-hidden="true" />
+          Unaccessable Links
+        </Link>
       </div>
     </section>
   );

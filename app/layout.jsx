@@ -4,6 +4,7 @@ import { config } from "@/data/config";
 import AppLoader from "@/components/ui/AppLoader";
 import BackgroundVideo from "@/components/ui/BackgroundVideo";
 import ToasterProvider from "@/components/ui/ToasterProvider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const orbitron = Orbitron({
   subsets: ["latin"],
@@ -83,6 +84,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
+    <ClerkProvider>
     <html
       lang="en"
       className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
@@ -98,7 +100,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="no-select h-[100svh] overflow-hidden antialiased">
         <AppLoader>
-          <div className="relative h-[100svh] overflow-y-auto overflow-x-hidden">
+          <div id="app-scroll-container" className="relative h-[100svh] overflow-y-auto overflow-x-hidden">
             <BackgroundVideo />
 
             <div className="relative z-10 min-h-full">{children}</div>
@@ -108,5 +110,6 @@ export default function RootLayout({ children }) {
         <ToasterProvider />
       </body>
     </html>
+    </ClerkProvider>
   );
 }
