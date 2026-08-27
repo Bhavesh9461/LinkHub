@@ -6,7 +6,7 @@ import { getPublicLinks } from "@/lib/getLinks";
 
 export default async function HomePage() {
   const links = await getPublicLinks();
-
+  
   return (
     <main className="flex min-h-dvh flex-col">
       <TopBar />

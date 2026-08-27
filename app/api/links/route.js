@@ -10,10 +10,33 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { id, name, description, url, copyValue, hasLink, show, visibility, iconType, iconUrl, iconName } = body;
+    const {
+      id,
+      name,
+      description,
+      visibility,
+      show,
+      kind,
+      iconType,
+      iconUrl,
+      iconName,
+      hasLink,
+      url,
+      copyValue,
+      liveUrl,
+      liveCopyValue,
+      githubUrl,
+      githubCopyValue,
+    } = body;
 
-    if (!id || !name || !copyValue) {
-      return Response.json({ success: false, message: "id, name, and copyValue are required" }, { status: 400 });
+    if (!id || !name) {
+      return Response.json({ success: false, message: "id and name are required" }, { status: 400 });
+    }
+
+    const resolvedKind = kind === "project" ? "project" : "link";
+
+    if (resolvedKind === "link" && !copyValue) {
+      return Response.json({ success: false, message: "copyValue is required for a Link" }, { status: 400 });
     }
 
     await connectToDatabase();
@@ -29,14 +52,19 @@ export async function POST(request) {
       id,
       name,
       description: description || "",
-      url: url || "",
-      copyValue,
-      hasLink: hasLink ?? true,
-      show: show ?? true,
       visibility: visibility === "private" ? "private" : "public",
+      show: show ?? true,
+      kind: resolvedKind,
       iconType: iconType || "none",
       iconUrl: iconUrl || "",
       iconName: iconName || "",
+      hasLink: hasLink ?? true,
+      url: url || "",
+      copyValue: copyValue || "",
+      liveUrl: liveUrl || "",
+      liveCopyValue: liveCopyValue || "",
+      githubUrl: githubUrl || "",
+      githubCopyValue: githubCopyValue || "",
       order: count + 1,
     });
 

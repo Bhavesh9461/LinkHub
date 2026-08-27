@@ -10,9 +10,14 @@ const emptyForm = {
   id: "",
   name: "",
   description: "",
+  kind: "link",
   url: "",
   copyValue: "",
   hasLink: true,
+  liveUrl: "",
+  liveCopyValue: "",
+  githubUrl: "",
+  githubCopyValue: "",
   show: true,
   visibility: "public",
   iconType: "none",
@@ -48,8 +53,7 @@ export default function ManageLinksPage() {
 
   function handleChange(field) {
     return (e) => {
-      const value =
-        e.target.type === "checkbox" ? e.target.checked : e.target.value;
+      const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
       setForm((prev) => ({ ...prev, [field]: value }));
     };
   }
@@ -60,9 +64,14 @@ export default function ManageLinksPage() {
       id: link.id,
       name: link.name,
       description: link.description || "",
+      kind: link.kind || "link",
       url: link.url || "",
-      copyValue: link.copyValue,
-      hasLink: link.hasLink,
+      copyValue: link.copyValue || "",
+      hasLink: link.hasLink ?? true,
+      liveUrl: link.liveUrl || "",
+      liveCopyValue: link.liveCopyValue || "",
+      githubUrl: link.githubUrl || "",
+      githubCopyValue: link.githubCopyValue || "",
       show: link.show,
       visibility: link.visibility,
       iconType: link.iconType || "none",
@@ -71,7 +80,7 @@ export default function ManageLinksPage() {
     });
     document.getElementById("app-scroll-container")?.scrollTo({ top: 0, behavior: "smooth" });
   }
-  
+
   function cancelEdit() {
     setEditingId(null);
     setForm(emptyForm);
@@ -79,8 +88,12 @@ export default function ManageLinksPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!form.id.trim() || !form.name.trim() || !form.copyValue.trim()) {
-      toast.error("id, name, and copy value are required");
+    if (!form.id.trim() || !form.name.trim()) {
+      toast.error("id and name are required");
+      return;
+    }
+    if (form.kind === "link" && !form.copyValue.trim()) {
+      toast.error("copy value is required for a Link");
       return;
     }
 
@@ -153,23 +166,35 @@ export default function ManageLinksPage() {
           Manage links
         </h1>
 
-        <form
-          onSubmit={handleSubmit}
-          className="glass flex flex-col gap-4 rounded-(--radius-card) p-5"
-        >
+        <form onSubmit={handleSubmit} className="glass flex flex-col gap-4 rounded-(--radius-card) p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-(--color-text)">
-              {editingId ? `Editing "${editingId}"` : "Add a new link"}
+              {editingId ? `Editing "${editingId}"` : "Add new"}
             </h2>
             {editingId && (
-              <button
-                type="button"
-                onClick={cancelEdit}
-                className="text-xs text-(--color-muted) hover:text-(--color-text)"
-              >
+              <button type="button" onClick={cancelEdit} className="text-xs text-(--color-muted) hover:text-(--color-text)">
                 Cancel edit
               </button>
             )}
+          </div>
+
+          {/* Type selector — Link or Project */}
+          <div>
+            <p className="mb-1.5 text-xs font-medium text-(--color-muted)">What is this?</p>
+            <div className="grid grid-cols-2 gap-2.5">
+              <TypeOption
+                active={form.kind === "link"}
+                onClick={() => setForm((prev) => ({ ...prev, kind: "link" }))}
+                icon="ri-link"
+                label="Link"
+              />
+              <TypeOption
+                active={form.kind === "project"}
+                onClick={() => setForm((prev) => ({ ...prev, kind: "project" }))}
+                icon="ri-folder-code-line"
+                label="Project"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -180,12 +205,7 @@ export default function ManageLinksPage() {
               placeholder="e.g. staging-site"
               disabled={!!editingId}
             />
-            <TextField
-              label="Name"
-              value={form.name}
-              onChange={handleChange("name")}
-              placeholder="e.g. Staging Site"
-            />
+            <TextField label="Name" value={form.name} onChange={handleChange("name")} placeholder="e.g. Staging Site" />
           </div>
 
           <TextField
@@ -194,133 +214,112 @@ export default function ManageLinksPage() {
             onChange={handleChange("description")}
             placeholder="Short description"
           />
-          <TextField
-            label="URL"
-            value={form.url}
-            onChange={handleChange("url")}
-            placeholder="https://…"
-          />
-          <TextField
-            label="Copy value"
-            value={form.copyValue}
-            onChange={handleChange("copyValue")}
-            placeholder="What gets copied when Copy is clicked"
-          />
+
+          {form.kind === "link" ? (
+            <>
+              <TextField label="URL" value={form.url} onChange={handleChange("url")} placeholder="https://…" />
+              <TextField
+                label="Copy value"
+                value={form.copyValue}
+                onChange={handleChange("copyValue")}
+                placeholder="What gets copied when Copy is clicked"
+              />
+              <label className="flex items-center gap-2 text-sm text-(--color-muted)">
+                <input type="checkbox" checked={form.hasLink} onChange={handleChange("hasLink")} className="h-4 w-4 accent-(--color-blue)" />
+                Show Visit button
+              </label>
+            </>
+          ) : (
+            <div className="flex flex-col gap-4 rounded-lg border border-(--color-border) p-4">
+              <p className="text-xs font-medium text-(--color-muted)">Both groups below are optional</p>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <TextField label="Live URL" value={form.liveUrl} onChange={handleChange("liveUrl")} placeholder="https://…" />
+                <TextField
+                  label="Live copy value"
+                  value={form.liveCopyValue}
+                  onChange={handleChange("liveCopyValue")}
+                  placeholder="Defaults to Live URL if left blank"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <TextField
+                  label="GitHub URL"
+                  value={form.githubUrl}
+                  onChange={handleChange("githubUrl")}
+                  placeholder="https://github.com/…"
+                />
+                <TextField
+                  label="GitHub copy value"
+                  value={form.githubCopyValue}
+                  onChange={handleChange("githubCopyValue")}
+                  placeholder="Defaults to GitHub URL if left blank"
+                />
+              </div>
+            </div>
+          )}
 
           <IconUploader
-            value={{
-              iconType: form.iconType,
-              iconUrl: form.iconUrl,
-              iconName: form.iconName,
-            }}
+            value={{ iconType: form.iconType, iconUrl: form.iconUrl, iconName: form.iconName }}
             onChange={(icon) => setForm((prev) => ({ ...prev, ...icon }))}
           />
 
           <div>
-            <p className="mb-1.5 text-xs font-medium text-(--color-muted)">
-              Where should this link appear?
-            </p>
+            <p className="mb-1.5 text-xs font-medium text-(--color-muted)">Where should this appear?</p>
             <div className="grid grid-cols-2 gap-2.5">
-              <VisibilityOption
+              <TypeOption
                 active={form.visibility === "public"}
-                onClick={() =>
-                  setForm((prev) => ({ ...prev, visibility: "public" }))
-                }
+                onClick={() => setForm((prev) => ({ ...prev, visibility: "public" }))}
                 icon="ri-earth-line"
-                label="Public (/)"
+                label={form.kind === "project" ? "Public (/projects)" : "Public (/)"}
               />
-              <VisibilityOption
+              <TypeOption
                 active={form.visibility === "private"}
-                onClick={() =>
-                  setForm((prev) => ({ ...prev, visibility: "private" }))
-                }
+                onClick={() => setForm((prev) => ({ ...prev, visibility: "private" }))}
                 icon="ri-lock-line"
                 label="Private"
               />
             </div>
           </div>
 
-          <div className="flex gap-6">
-            <label className="flex items-center gap-2 text-sm text-(--color-muted)">
-              <input
-                type="checkbox"
-                checked={form.hasLink}
-                onChange={handleChange("hasLink")}
-                className="h-4 w-4 accent-(--color-blue)"
-              />
-              Show Visit button
-            </label>
-            <label className="flex items-center gap-2 text-sm text-(--color-muted)">
-              <input
-                type="checkbox"
-                checked={form.show}
-                onChange={handleChange("show")}
-                className="h-4 w-4 accent-(--color-blue)"
-              />
-              Visible
-            </label>
-          </div>
+          <label className="flex items-center gap-2 text-sm text-(--color-muted)">
+            <input type="checkbox" checked={form.show} onChange={handleChange("show")} className="h-4 w-4 accent-(--color-blue)" />
+            Visible
+          </label>
 
           <button
             type="submit"
             disabled={saving}
             className="inline-flex h-(--size-btn-h) items-center justify-center gap-2 self-start rounded-lg bg-gradient-to-r from-(--color-violet) to-(--color-blue) px-5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
           >
-            <i
-              className={`${saving ? "ri-loader-4-line animate-spin" : editingId ? "ri-save-line" : "ri-add-line"} text-base`}
-              aria-hidden="true"
-            />
-            {saving ? "Saving…" : editingId ? "Save changes" : "Add link"}
+            <i className={`${saving ? "ri-loader-4-line animate-spin" : editingId ? "ri-save-line" : "ri-add-line"} text-base`} aria-hidden="true" />
+            {saving ? "Saving…" : editingId ? "Save changes" : "Add"}
           </button>
         </form>
 
         <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold text-(--color-text)">
-            All links
-          </h2>
+          <h2 className="text-sm font-semibold text-(--color-text)">All entries</h2>
 
           {loading ? (
             <p className="text-sm text-(--color-muted)">Loading…</p>
           ) : links.length === 0 ? (
-            <p className="text-sm text-(--color-muted)">
-              No links yet — add one above.
-            </p>
+            <p className="text-sm text-(--color-muted)">Nothing yet — add one above.</p>
           ) : (
             links.map((link) => (
-              <div
-                key={link.id}
-                className="glass flex items-center justify-between gap-3 rounded-lg px-4 py-3"
-              >
+              <div key={link.id} className="glass flex items-center justify-between gap-3 rounded-lg px-4 py-3">
                 <div className="flex min-w-0 items-center gap-3">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-(--color-border) bg-(--color-surface-2)">
-                    <IconImage
-                      iconType={link.iconType}
-                      iconUrl={link.iconUrl}
-                      iconName={link.iconName}
-                      size={18}
-                    />
+                    <IconImage iconType={link.iconType} iconUrl={link.iconUrl} iconName={link.iconName} size={18} />
                   </span>
                   <div className="min-w-0">
-                    <p className="flex items-center gap-1.5 truncate text-sm font-medium text-(--color-text)">
+                    <p className="flex flex-wrap items-center gap-1.5 truncate text-sm font-medium text-(--color-text)">
                       {link.name}
-                      <span
-                        className={`rounded px-1.5 py-0.5 text-[0.65rem] font-medium ${
-                          link.visibility === "private"
-                            ? "bg-(--color-pink)/15 text-(--color-pink)"
-                            : "bg-(--color-blue)/15 text-(--color-blue)"
-                        }`}
-                      >
-                        {link.visibility}
-                      </span>
-                      {!link.show && (
-                        <span className="text-[0.65rem] text-(--color-muted)">
-                          (hidden)
-                        </span>
-                      )}
+                      <Badge tone={link.kind === "project" ? "violet" : "default"}>{link.kind || "link"}</Badge>
+                      <Badge tone={link.visibility === "private" ? "pink" : "blue"}>{link.visibility}</Badge>
+                      {!link.show && <span className="text-[0.65rem] text-(--color-muted)">(hidden)</span>}
                     </p>
-                    <p className="truncate text-xs text-(--color-muted)">
-                      {link.description || link.copyValue}
-                    </p>
+                    <p className="truncate text-xs text-(--color-muted)">{link.description || link.copyValue}</p>
                   </div>
                 </div>
 
@@ -339,10 +338,7 @@ export default function ManageLinksPage() {
                     disabled={busyId === link.id}
                     className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-(--color-border) px-3 text-xs font-medium text-(--color-pink) transition-colors hover:bg-(--color-pink)/10 disabled:opacity-60"
                   >
-                    <i
-                      className={`${busyId === link.id ? "ri-loader-4-line animate-spin" : "ri-delete-bin-line"} text-sm`}
-                      aria-hidden="true"
-                    />
+                    <i className={`${busyId === link.id ? "ri-loader-4-line animate-spin" : "ri-delete-bin-line"} text-sm`} aria-hidden="true" />
                     Delete
                   </button>
                 </div>
@@ -358,9 +354,7 @@ export default function ManageLinksPage() {
 function TextField({ label, ...props }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-medium text-(--color-muted)">
-        {label}
-      </label>
+      <label className="mb-1.5 block text-xs font-medium text-(--color-muted)">{label}</label>
       <input
         {...props}
         className="h-(--size-btn-h) w-full rounded-lg border border-(--color-border) bg-(--color-surface-2) px-3 text-sm text-(--color-text) outline-none transition-colors placeholder:text-(--color-muted)/60 focus:border-(--color-blue) disabled:opacity-50"
@@ -369,7 +363,7 @@ function TextField({ label, ...props }) {
   );
 }
 
-function VisibilityOption({ active, onClick, icon, label }) {
+function TypeOption({ active, onClick, icon, label }) {
   return (
     <button
       type="button"
@@ -385,4 +379,14 @@ function VisibilityOption({ active, onClick, icon, label }) {
       {label}
     </button>
   );
+}
+
+function Badge({ tone = "default", children }) {
+  const toneClasses = {
+    default: "bg-(--color-surface-2) text-(--color-muted)",
+    blue: "bg-(--color-blue)/15 text-(--color-blue)",
+    pink: "bg-(--color-pink)/15 text-(--color-pink)",
+    violet: "bg-(--color-violet)/15 text-(--color-violet)",
+  };
+  return <span className={`rounded px-1.5 py-0.5 text-[0.65rem] font-medium ${toneClasses[tone]}`}>{children}</span>;
 }

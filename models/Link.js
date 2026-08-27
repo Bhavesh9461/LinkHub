@@ -6,17 +6,27 @@ const LinkSchema = new mongoose.Schema(
     name: { type: String, required: true },
     description: { type: String, default: "" },
     show: { type: Boolean, default: true },
-    hasLink: { type: Boolean, default: true },
-    url: { type: String, default: "" },
-    copyValue: { type: String, required: true },
     visibility: { type: String, enum: ["public", "private"], default: "public" },
     order: { type: Number, default: 0 },
 
-    // Icon: either an uploaded image (ImageKit) or a Remix Icon class name.
-    // If neither is set, the UI falls back to a generic default icon.
+    // What kind of card this renders as.
+    kind: { type: String, enum: ["link", "project"], default: "link" },
+
+    // Icon — same for both kinds.
     iconType: { type: String, enum: ["upload", "remix", "none"], default: "none" },
-    iconUrl: { type: String, default: "" }, // set when iconType === "upload"
-    iconName: { type: String, default: "" }, // set when iconType === "remix", e.g. "ri-github-line"
+    iconUrl: { type: String, default: "" },
+    iconName: { type: String, default: "" },
+
+    // kind: "link" fields
+    hasLink: { type: Boolean, default: true },
+    url: { type: String, default: "" },
+    copyValue: { type: String, default: "" },
+
+    // kind: "project" fields — both groups fully optional
+    liveUrl: { type: String, default: "" },
+    liveCopyValue: { type: String, default: "" },
+    githubUrl: { type: String, default: "" },
+    githubCopyValue: { type: String, default: "" },
   },
   { timestamps: true }
 );

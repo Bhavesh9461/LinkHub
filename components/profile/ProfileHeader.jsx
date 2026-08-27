@@ -32,13 +32,22 @@ export default function ProfileHeader() {
         </span>
       </div>
 
-      <Link
-        href="/private-links"
-        className="glass mt-1 inline-flex h-(--size-btn-h-sm) items-center gap-2 rounded-(--radius-pill) px-4 text-xs font-medium text-(--color-muted) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
-      >
-        <i className="ri-lock-line text-sm" aria-hidden="true" />
-        Unaccessable Links
-      </Link>
+      <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
+        <Link
+          href="/projects"
+          className="glass inline-flex h-(--size-btn-h-sm) items-center gap-2 rounded-(--radius-pill) px-4 text-xs font-medium text-(--color-muted) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
+        >
+          <i className="ri-folder-code-line text-sm" aria-hidden="true" />
+          Projects
+        </Link>
+        <Link
+          href="/private-links"
+          className="glass inline-flex h-(--size-btn-h-sm) items-center gap-2 rounded-(--radius-pill) px-4 text-xs font-medium text-(--color-muted) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
+        >
+          <i className="ri-lock-line text-sm" aria-hidden="true" />
+          Unaccessable Links
+        </Link>
+      </div>
     </section>
   );
 }
