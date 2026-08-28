@@ -12,21 +12,9 @@ export default function manifest() {
     icons: [
       {
         src: "/iconlogo.png",
-        sizes: "192x192",
+        sizes: "24x24",
         type: "image/png",
         purpose: "any",
-      },
-      {
-        src: "/iconlogo.png",
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "any",
-      },
-      {
-        src: "/iconlogo.png",
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "maskable",
       },
     ],
   };

@@ -39,16 +39,7 @@ export const metadata = {
   description: config.siteDescription,
 
   icons: {
-    icon: [
-      {
-        url: "/iconlogo.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/iconlogo-dark.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-    ],
+    icon: "/iconlogo.png",
     apple: "/iconlogo.png",
     shortcut: "/iconlogo.png",
   },
@@ -60,9 +51,9 @@ export const metadata = {
     siteName: config.siteName,
     images: [
       {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
+        url: "/iconlogo.png",
+        width: 24,
+        height: 24,
         alt: "Bhavesh Kumar — All My Links",
       },
     ],
@@ -73,7 +64,7 @@ export const metadata = {
     card: "summary_large_image",
     title: config.siteName,
     description: config.siteDescription,
-    images: ["/og-image.png"],
+    images: ["/iconlogo.png"],
   },
 };
 
@@ -86,31 +77,39 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-    <html
-      lang="en"
-      className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
-    >
-      <head>
-        <link rel="preload" href="/video/bg.mp4" as="video" type="video/mp4" />
-        <link
-          rel="preload"
-          href="/images/mypic.jpeg"
-          as="image"
-          type="image/jpeg"
-        />
-      </head>
-      <body className="no-select h-[100svh] overflow-hidden antialiased">
-        <AppLoader>
-          <div id="app-scroll-container" className="relative h-[100svh] overflow-y-auto overflow-x-hidden">
-            <BackgroundVideo />
+      <html
+        lang="en"
+        className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+      >
+        <head>
+          <link
+            rel="preload"
+            href="/video/bg.mp4"
+            as="video"
+            type="video/mp4"
+          />
+          <link
+            rel="preload"
+            href="/images/mypic.jpeg"
+            as="image"
+            type="image/jpeg"
+          />
+        </head>
+        <body className="no-select h-[100svh] overflow-hidden antialiased">
+          <AppLoader>
+            <div
+              id="app-scroll-container"
+              className="relative h-[100svh] overflow-y-auto overflow-x-hidden"
+            >
+              <BackgroundVideo />
 
-            <div className="relative z-10 min-h-full">{children}</div>
-          </div>
-        </AppLoader>
+              <div className="relative z-10 min-h-full">{children}</div>
+            </div>
+          </AppLoader>
 
-        <ToasterProvider />
-      </body>
-    </html>
+          <ToasterProvider />
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
