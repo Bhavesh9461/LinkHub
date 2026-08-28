@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { DragDropProvider } from "@dnd-kit/react";
+import { move } from "@dnd-kit/helpers";
 import PrivateLinksHeader from "@/components/links/PrivateLinksHeader";
 import IconUploader from "@/components/links/IconUploader";
-import IconImage from "@/components/ui/IconImage";
+import SortableLinkRow from "@/components/links/SortableLinkRow";
 
 const emptyForm = {
   id: "",
@@ -157,6 +159,36 @@ export default function ManageLinksPage() {
     }
   }
 
+  // Optimistically reorder during drag, then persist the final order once dropped.
+  function handleDragEnd(event) {
+    if (event.canceled) return;
+
+    setLinks((current) => {
+      const reordered = move(current, event);
+      persistOrder(reordered);
+      return reordered;
+    });
+  }
+
+  async function persistOrder(orderedLinks) {
+    const order = orderedLinks.map((link, index) => ({ id: link.id, order: index + 1 }));
+    try {
+      const res = await fetch("/api/links/reorder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order }),
+      });
+      const data = await res.json();
+      if (!data.success) {
+        toast.error("Couldn't save new order");
+        loadLinks();
+      }
+    } catch {
+      toast.error("Network error saving order");
+      loadLinks();
+    }
+  }
+
   return (
     <main className="flex min-h-dvh flex-col">
       <PrivateLinksHeader backHref="/private-links" />
@@ -178,7 +210,6 @@ export default function ManageLinksPage() {
             )}
           </div>
 
-          {/* Type selector — Link or Project */}
           <div>
             <p className="mb-1.5 text-xs font-medium text-(--color-muted)">What is this?</p>
             <div className="grid grid-cols-2 gap-2.5">
@@ -299,51 +330,32 @@ export default function ManageLinksPage() {
         </form>
 
         <div className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold text-(--color-text)">All entries</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-(--color-text)">All entries</h2>
+            {links.length > 1 && (
+              <p className="text-[0.7rem] text-(--color-muted)">Drag the handle to reorder</p>
+            )}
+          </div>
 
           {loading ? (
             <p className="text-sm text-(--color-muted)">Loading…</p>
           ) : links.length === 0 ? (
             <p className="text-sm text-(--color-muted)">Nothing yet — add one above.</p>
           ) : (
-            links.map((link) => (
-              <div key={link.id} className="glass flex items-center justify-between gap-3 rounded-lg px-4 py-3">
-                <div className="flex min-w-0 items-center gap-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-(--color-border) bg-(--color-surface-2)">
-                    <IconImage iconType={link.iconType} iconUrl={link.iconUrl} iconName={link.iconName} size={18} />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="flex flex-wrap items-center gap-1.5 truncate text-sm font-medium text-(--color-text)">
-                      {link.name}
-                      <Badge tone={link.kind === "project" ? "violet" : "default"}>{link.kind || "link"}</Badge>
-                      <Badge tone={link.visibility === "private" ? "pink" : "blue"}>{link.visibility}</Badge>
-                      {!link.show && <span className="text-[0.65rem] text-(--color-muted)">(hidden)</span>}
-                    </p>
-                    <p className="truncate text-xs text-(--color-muted)">{link.description || link.copyValue}</p>
-                  </div>
-                </div>
-
-                <div className="flex shrink-0 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => startEdit(link)}
-                    className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-(--color-border) px-3 text-xs font-medium text-(--color-text) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
-                  >
-                    <i className="ri-edit-line text-sm" aria-hidden="true" />
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(link.id)}
-                    disabled={busyId === link.id}
-                    className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-(--color-border) px-3 text-xs font-medium text-(--color-pink) transition-colors hover:bg-(--color-pink)/10 disabled:opacity-60"
-                  >
-                    <i className={`${busyId === link.id ? "ri-loader-4-line animate-spin" : "ri-delete-bin-line"} text-sm`} aria-hidden="true" />
-                    Delete
-                  </button>
-                </div>
+            <DragDropProvider onDragEnd={handleDragEnd}>
+              <div className="flex flex-col gap-2">
+                {links.map((link, index) => (
+                  <SortableLinkRow
+                    key={link.id}
+                    link={link}
+                    index={index}
+                    onEdit={startEdit}
+                    onDelete={handleDelete}
+                    busy={busyId === link.id}
+                  />
+                ))}
               </div>
-            ))
+            </DragDropProvider>
           )}
         </div>
       </div>
@@ -379,14 +391,4 @@ function TypeOption({ active, onClick, icon, label }) {
       {label}
     </button>
   );
-}
-
-function Badge({ tone = "default", children }) {
-  const toneClasses = {
-    default: "bg-(--color-surface-2) text-(--color-muted)",
-    blue: "bg-(--color-blue)/15 text-(--color-blue)",
-    pink: "bg-(--color-pink)/15 text-(--color-pink)",
-    violet: "bg-(--color-violet)/15 text-(--color-violet)",
-  };
-  return <span className={`rounded px-1.5 py-0.5 text-[0.65rem] font-medium ${toneClasses[tone]}`}>{children}</span>;
 }
