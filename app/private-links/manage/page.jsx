@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import toast from "react-hot-toast";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import PrivateLinksHeader from "@/components/links/PrivateLinksHeader";
 import IconUploader from "@/components/links/IconUploader";
 import SortableLinkRow from "@/components/links/SortableLinkRow";
+import { useDebouncedValue } from "@/lib/useDebouncedValue";
+import StaticLinkRow from "@/components/links/StaticLinkRow";
 
 const emptyForm = {
   id: "",
@@ -30,6 +32,9 @@ const emptyForm = {
 export default function ManageLinksPage() {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchInput, setSearchInput] = useState("");
+  const debouncedSearch = useDebouncedValue(searchInput, 300);
+
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [busyId, setBusyId] = useState(null);
@@ -55,7 +60,8 @@ export default function ManageLinksPage() {
 
   function handleChange(field) {
     return (e) => {
-      const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+      const value =
+        e.target.type === "checkbox" ? e.target.checked : e.target.value;
       setForm((prev) => ({ ...prev, [field]: value }));
     };
   }
@@ -80,7 +86,9 @@ export default function ManageLinksPage() {
       iconUrl: link.iconUrl || "",
       iconName: link.iconName || "",
     });
-    document.getElementById("app-scroll-container")?.scrollTo({ top: 0, behavior: "smooth" });
+    document
+      .getElementById("app-scroll-container")
+      ?.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function cancelEdit() {
@@ -171,7 +179,10 @@ export default function ManageLinksPage() {
   }
 
   async function persistOrder(orderedLinks) {
-    const order = orderedLinks.map((link, index) => ({ id: link.id, order: index + 1 }));
+    const order = orderedLinks.map((link, index) => ({
+      id: link.id,
+      order: index + 1,
+    }));
     try {
       const res = await fetch("/api/links/reorder", {
         method: "POST",
@@ -189,6 +200,25 @@ export default function ManageLinksPage() {
     }
   }
 
+  const filteredLinks = useMemo(() => {
+    const query = debouncedSearch.trim().toLowerCase();
+    if (!query) return links;
+
+    // Comma or space separated terms — matches if the name contains ANY term.
+    // "github, instagram" → matches names containing "github" OR "instagram".
+    const terms = query
+      .split(/[,\s]+/)
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    return links.filter((link) => {
+      const name = link.name.toLowerCase();
+      return terms.some((term) => name.includes(term));
+    });
+  }, [links, debouncedSearch]);
+
+  const isSearching = debouncedSearch.trim().length > 0;
+
   return (
     <main className="flex min-h-dvh flex-col">
       <PrivateLinksHeader backHref="/private-links" />
@@ -198,20 +228,29 @@ export default function ManageLinksPage() {
           Manage links
         </h1>
 
-        <form onSubmit={handleSubmit} className="glass flex flex-col gap-4 rounded-(--radius-card) p-5">
+        <form
+          onSubmit={handleSubmit}
+          className="glass flex flex-col gap-4 rounded-(--radius-card) p-5"
+        >
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-(--color-text)">
               {editingId ? `Editing "${editingId}"` : "Add new"}
             </h2>
             {editingId && (
-              <button type="button" onClick={cancelEdit} className="text-xs text-(--color-muted) hover:text-(--color-text)">
+              <button
+                type="button"
+                onClick={cancelEdit}
+                className="text-xs text-(--color-muted) hover:text-(--color-text)"
+              >
                 Cancel edit
               </button>
             )}
           </div>
 
           <div>
-            <p className="mb-1.5 text-xs font-medium text-(--color-muted)">What is this?</p>
+            <p className="mb-1.5 text-xs font-medium text-(--color-muted)">
+              What is this?
+            </p>
             <div className="grid grid-cols-2 gap-2.5">
               <TypeOption
                 active={form.kind === "link"}
@@ -221,7 +260,9 @@ export default function ManageLinksPage() {
               />
               <TypeOption
                 active={form.kind === "project"}
-                onClick={() => setForm((prev) => ({ ...prev, kind: "project" }))}
+                onClick={() =>
+                  setForm((prev) => ({ ...prev, kind: "project" }))
+                }
                 icon="ri-folder-code-line"
                 label="Project"
               />
@@ -236,7 +277,12 @@ export default function ManageLinksPage() {
               placeholder="e.g. staging-site"
               disabled={!!editingId}
             />
-            <TextField label="Name" value={form.name} onChange={handleChange("name")} placeholder="e.g. Staging Site" />
+            <TextField
+              label="Name"
+              value={form.name}
+              onChange={handleChange("name")}
+              placeholder="e.g. Staging Site"
+            />
           </div>
 
           <TextField
@@ -248,7 +294,12 @@ export default function ManageLinksPage() {
 
           {form.kind === "link" ? (
             <>
-              <TextField label="URL" value={form.url} onChange={handleChange("url")} placeholder="https://…" />
+              <TextField
+                label="URL"
+                value={form.url}
+                onChange={handleChange("url")}
+                placeholder="https://…"
+              />
               <TextField
                 label="Copy value"
                 value={form.copyValue}
@@ -256,16 +307,28 @@ export default function ManageLinksPage() {
                 placeholder="What gets copied when Copy is clicked"
               />
               <label className="flex items-center gap-2 text-sm text-(--color-muted)">
-                <input type="checkbox" checked={form.hasLink} onChange={handleChange("hasLink")} className="h-4 w-4 accent-(--color-blue)" />
+                <input
+                  type="checkbox"
+                  checked={form.hasLink}
+                  onChange={handleChange("hasLink")}
+                  className="h-4 w-4 accent-(--color-blue)"
+                />
                 Show Visit button
               </label>
             </>
           ) : (
             <div className="flex flex-col gap-4 rounded-lg border border-(--color-border) p-4">
-              <p className="text-xs font-medium text-(--color-muted)">Both groups below are optional</p>
+              <p className="text-xs font-medium text-(--color-muted)">
+                Both groups below are optional
+              </p>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <TextField label="Live URL" value={form.liveUrl} onChange={handleChange("liveUrl")} placeholder="https://…" />
+                <TextField
+                  label="Live URL"
+                  value={form.liveUrl}
+                  onChange={handleChange("liveUrl")}
+                  placeholder="https://…"
+                />
                 <TextField
                   label="Live copy value"
                   value={form.liveCopyValue}
@@ -292,22 +355,34 @@ export default function ManageLinksPage() {
           )}
 
           <IconUploader
-            value={{ iconType: form.iconType, iconUrl: form.iconUrl, iconName: form.iconName }}
+            value={{
+              iconType: form.iconType,
+              iconUrl: form.iconUrl,
+              iconName: form.iconName,
+            }}
             onChange={(icon) => setForm((prev) => ({ ...prev, ...icon }))}
           />
 
           <div>
-            <p className="mb-1.5 text-xs font-medium text-(--color-muted)">Where should this appear?</p>
+            <p className="mb-1.5 text-xs font-medium text-(--color-muted)">
+              Where should this appear?
+            </p>
             <div className="grid grid-cols-2 gap-2.5">
               <TypeOption
                 active={form.visibility === "public"}
-                onClick={() => setForm((prev) => ({ ...prev, visibility: "public" }))}
+                onClick={() =>
+                  setForm((prev) => ({ ...prev, visibility: "public" }))
+                }
                 icon="ri-earth-line"
-                label={form.kind === "project" ? "Public (/projects)" : "Public (/)"}
+                label={
+                  form.kind === "project" ? "Public (/projects)" : "Public (/)"
+                }
               />
               <TypeOption
                 active={form.visibility === "private"}
-                onClick={() => setForm((prev) => ({ ...prev, visibility: "private" }))}
+                onClick={() =>
+                  setForm((prev) => ({ ...prev, visibility: "private" }))
+                }
                 icon="ri-lock-line"
                 label="Private"
               />
@@ -315,7 +390,12 @@ export default function ManageLinksPage() {
           </div>
 
           <label className="flex items-center gap-2 text-sm text-(--color-muted)">
-            <input type="checkbox" checked={form.show} onChange={handleChange("show")} className="h-4 w-4 accent-(--color-blue)" />
+            <input
+              type="checkbox"
+              checked={form.show}
+              onChange={handleChange("show")}
+              className="h-4 w-4 accent-(--color-blue)"
+            />
             Visible
           </label>
 
@@ -324,27 +404,82 @@ export default function ManageLinksPage() {
             disabled={saving}
             className="inline-flex h-(--size-btn-h) items-center justify-center gap-2 self-start rounded-lg bg-gradient-to-r from-(--color-violet) to-(--color-blue) px-5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
           >
-            <i className={`${saving ? "ri-loader-4-line animate-spin" : editingId ? "ri-save-line" : "ri-add-line"} text-base`} aria-hidden="true" />
+            <i
+              className={`${saving ? "ri-loader-4-line animate-spin" : editingId ? "ri-save-line" : "ri-add-line"} text-base`}
+              aria-hidden="true"
+            />
             {saving ? "Saving…" : editingId ? "Save changes" : "Add"}
           </button>
         </form>
 
         <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-(--color-text)">All entries</h2>
-            {links.length > 1 && (
-              <p className="text-[0.7rem] text-(--color-muted)">Drag the handle to reorder</p>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-sm font-semibold text-(--color-text)">
+              All entries
+            </h2>
+            {links.length > 1 && !isSearching && (
+              <p className="text-[0.7rem] text-(--color-muted)">
+                Drag anywhere on a card to reorder
+              </p>
             )}
           </div>
 
+          <div className="relative">
+            <i
+              className="ri-search-line pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-(--color-muted)"
+              aria-hidden="true"
+            />
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search by name — e.g. github, instagram"
+              className="h-(--size-btn-h) w-full rounded-lg border border-(--color-border) bg-(--color-surface-2) pl-9 pr-9 text-sm text-(--color-text) outline-none transition-colors placeholder:text-(--color-muted)/60 focus:border-(--color-blue)"
+            />
+            {searchInput && (
+              <button
+                type="button"
+                onClick={() => setSearchInput("")}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-(--color-muted) hover:text-(--color-text)"
+              >
+                <i className="ri-close-line" aria-hidden="true" />
+              </button>
+            )}
+          </div>
+
+          {isSearching && (
+            <p className="text-[0.7rem] text-(--color-muted)">
+              {filteredLinks.length} result
+              {filteredLinks.length === 1 ? "" : "s"} — reordering is disabled
+              while searching
+            </p>
+          )}
+
           {loading ? (
             <p className="text-sm text-(--color-muted)">Loading…</p>
-          ) : links.length === 0 ? (
-            <p className="text-sm text-(--color-muted)">Nothing yet — add one above.</p>
+          ) : filteredLinks.length === 0 ? (
+            <p className="text-sm text-(--color-muted)">
+              {isSearching
+                ? "No matches found."
+                : "Nothing yet — add one above."}
+            </p>
+          ) : isSearching ? (
+            <div className="flex flex-col gap-2">
+              {filteredLinks.map((link) => (
+                <StaticLinkRow
+                  key={link.id}
+                  link={link}
+                  onEdit={startEdit}
+                  onDelete={handleDelete}
+                  busy={busyId === link.id}
+                />
+              ))}
+            </div>
           ) : (
             <DragDropProvider onDragEnd={handleDragEnd}>
               <div className="flex flex-col gap-2">
-                {links.map((link, index) => (
+                {filteredLinks.map((link, index) => (
                   <SortableLinkRow
                     key={link.id}
                     link={link}
@@ -366,7 +501,9 @@ export default function ManageLinksPage() {
 function TextField({ label, ...props }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-medium text-(--color-muted)">{label}</label>
+      <label className="mb-1.5 block text-xs font-medium text-(--color-muted)">
+        {label}
+      </label>
       <input
         {...props}
         className="h-(--size-btn-h) w-full rounded-lg border border-(--color-border) bg-(--color-surface-2) px-3 text-sm text-(--color-text) outline-none transition-colors placeholder:text-(--color-muted)/60 focus:border-(--color-blue) disabled:opacity-50"
