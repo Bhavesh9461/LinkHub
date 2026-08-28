@@ -29,6 +29,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata = {
   metadataBase: new URL("https://linkhub-ten-indol.vercel.app"),
+  manifest: "/manifest.webmanifest",
 
   title: {
     default: config.siteName,
