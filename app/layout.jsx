@@ -42,8 +42,8 @@ export const metadata = {
       { url: "/iconlogo.png", media: "(prefers-color-scheme: light)" },
       { url: "/iconlogo-dark.png", media: "(prefers-color-scheme: dark)" },
     ],
-    apple: "/iconlogo2.webp",
-    shortcut: "/iconlogo2.webp",
+    apple: "/iconlogo2.png",
+    shortcut: "/iconlogo2.png",
   },
 
   openGraph: {
