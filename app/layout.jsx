@@ -53,7 +53,7 @@ export const metadata = {
     siteName: config.siteName,
     images: [
       {
-        url: "/og-image.webp",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Bhavesh Kumar",
