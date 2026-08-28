@@ -28,7 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://linkhub-ten-indol.vercel.app"),
+  metadataBase: new URL("https://linkhub-ten-indol.vercel.app/"),
 
   title: {
     default: config.siteName,
@@ -49,13 +49,13 @@ export const metadata = {
   openGraph: {
     title: config.siteName,
     description: config.siteDescription,
-    url: "https://linkhub-ten-indol.vercel.app",
+    url: "https://linkhub-ten-indol.vercel.app/",
     siteName: config.siteName,
     images: [
       {
         url: "/og-image.png",
-        width: 1200,
-        height: 630,
+        width: 1086,
+        height: 1448,
         alt: "Bhavesh Kumar",
       },
     ],
