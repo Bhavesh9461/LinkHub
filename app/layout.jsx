@@ -28,8 +28,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://linkhub-ten-indol.vercel.app/"),
-  manifest: "/manifest.webmanifest",
+  metadataBase: new URL("https://linkhub-ten-indol.vercel.app"),
+  // manifest: "/manifest.webmanifest",
 
   title: {
     default: config.siteName,
@@ -38,22 +38,31 @@ export const metadata = {
 
   description: config.siteDescription,
 
-  icons: {
-    icon: "/iconlogo.png",
+   icons: {
+    icon: [
+      {
+        url: "/iconlogo.png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/iconlogo-dark.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
     apple: "/iconlogo.png",
-    shortcut: "/iconlogo.png",
+    shortcut: "/iconlogo2.png",
   },
 
   openGraph: {
     title: config.siteName,
     description: config.siteDescription,
-    url: "/",
+    url: "https://linkhub-ten-indol.vercel.app",
     siteName: config.siteName,
     images: [
       {
-        url: "/iconlogo.png",
-        width: 24,
-        height: 24,
+        url: "/iconlogo2.png",
+        width: 256,
+        height: 256,
         alt: "Bhavesh Kumar — All My Links",
       },
     ],
@@ -64,7 +73,7 @@ export const metadata = {
     card: "summary_large_image",
     title: config.siteName,
     description: config.siteDescription,
-    images: ["/iconlogo.png"],
+    images: ["/iconlogo2.png"],
   },
 };
 
