@@ -11,19 +11,19 @@ export default function manifest() {
     theme_color: "#55ADF8",
     icons: [
       {
-        src: "/og-image.png",
+        src: "/iconlogo.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/og-image.png",
+        src: "/iconlogo.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/og-image.png",
+        src: "/iconlogo.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
