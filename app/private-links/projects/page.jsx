@@ -1,6 +1,6 @@
 import PrivateLinksHeader from "@/components/links/PrivateLinksHeader";
-import ProjectsGrid from "@/components/links/ProjectsGrid";
 import ManageLinksButton from "@/components/links/ManageLinksButton";
+import SearchableProjectsGrid from "@/components/links/SearchableProjectsGrid";
 import { getPrivateProjects } from "@/lib/getLinks";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,7 @@ export default async function PrivateProjectsPage() {
         </h1>
       </div>
 
-      <ProjectsGrid projects={projects} emptyMessage="No private projects yet — add one from Manage links." />
+      <SearchableProjectsGrid projects={projects} emptyMessage="No private projects yet — add one from Manage links." />
     </main>
   );
 }

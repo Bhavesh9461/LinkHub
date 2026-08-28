@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ProjectsGrid from "@/components/links/ProjectsGrid";
+import SearchableProjectsGrid from "@/components/links/SearchableProjectsGrid";
 import { getPublicProjects } from "@/lib/getLinks";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ export default async function ProjectsPage() {
         <h1 className="font-(family-name:--font-display) text-xl font-semibold text-(--color-text)">Projects</h1>
       </div>
 
-      <ProjectsGrid projects={projects} emptyMessage="No projects yet." />
+      <SearchableProjectsGrid projects={projects} emptyMessage="No projects yet." />
     </main>
   );
 }
