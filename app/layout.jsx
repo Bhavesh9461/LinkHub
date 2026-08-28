@@ -55,7 +55,7 @@ export const metadata = {
   openGraph: {
     title: config.siteName,
     description: config.siteDescription,
-    url: "https://linkhub-ten-indol.vercel.app",
+    url: "/",
     siteName: config.siteName,
     images: [
       {
