@@ -27,6 +27,9 @@ export async function POST(request) {
       liveCopyValue,
       githubUrl,
       githubCopyValue,
+      members,
+      startDate,
+      completionDate,
     } = body;
 
     if (!id || !name) {
@@ -65,6 +68,9 @@ export async function POST(request) {
       liveCopyValue: liveCopyValue || "",
       githubUrl: githubUrl || "",
       githubCopyValue: githubCopyValue || "",
+      members: members || "",
+      startDate: startDate || "",
+      completionDate: completionDate || "",
       order: count + 1,
     });
 

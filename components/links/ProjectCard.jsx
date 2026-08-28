@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import IconImage from "@/components/ui/IconImage";
+import ProjectInfoModal from "@/components/links/ProjectInfoModal";
 import { copyToClipboard } from "@/lib/clipboard";
 
 export default function ProjectCard({ project }) {
+  const [infoOpen, setInfoOpen] = useState(false);
   const {
     name,
     description,
@@ -20,48 +23,66 @@ export default function ProjectCard({ project }) {
   const hasGithub = Boolean(githubUrl || githubCopyValue);
 
   return (
-    <article className="card-sheen glass relative flex h-full flex-col gap-4 rounded-(--radius-card) p-5 transition-transform duration-300 hover:-translate-y-0.5">
-      <div className="flex items-start gap-3">
-        <span className="flex h-(--size-icon) w-(--size-icon) shrink-0 items-center justify-center rounded-xl border border-(--color-border) bg-(--color-surface-2)">
-          <IconImage
-            iconType={iconType}
-            iconUrl={iconUrl}
-            iconName={iconName}
-            size={22}
-          />
-        </span>
-        <div className="min-w-0">
-          <h3 className="truncate font-(family-name:--font-display) text-[0.95rem] font-semibold text-(--color-text)">
-            {name}
-          </h3>
-          <p className="mt-0.5 line-clamp-2 text-xs text-(--color-muted)">
-            {description}
-          </p>
-        </div>
-      </div>
+    <>
+      <article className="card-sheen glass relative flex h-full flex-col gap-4 rounded-(--radius-card) p-5 transition-transform duration-300 hover:-translate-y-0.5">
+        <button
+          type="button"
+          onClick={() => setInfoOpen(true)}
+          aria-label={`Info about ${name}`}
+          className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full border border-(--color-border) bg-(--color-surface-2) text-(--color-muted) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
+        >
+          <i className="ri-information-line text-sm" aria-hidden="true" />
+        </button>
 
-      <div className="mt-auto flex flex-col gap-2">
-        {hasLive && (
-          <LinkRow
-            label="Live"
-            copyValue={liveCopyValue || liveUrl}
-            url={liveUrl}
-            copyLabel={`${name} live link`}
-          />
-        )}
-        {hasGithub && (
-          <LinkRow
-            label="GitHub"
-            copyValue={githubCopyValue || githubUrl}
-            url={githubUrl}
-            copyLabel={`${name} GitHub link`}
-          />
-        )}
-        {!hasLive && !hasGithub && (
-          <p className="text-xs text-(--color-muted)">No links added yet</p>
-        )}
-      </div>
-    </article>
+        <div className="flex items-start gap-3 pr-7">
+          <span className="flex h-(--size-icon) w-(--size-icon) shrink-0 items-center justify-center rounded-xl border border-(--color-border) bg-(--color-surface-2)">
+            <IconImage
+              iconType={iconType}
+              iconUrl={iconUrl}
+              iconName={iconName}
+              size={22}
+            />
+          </span>
+          <div className="min-w-0">
+            <h3 className="truncate font-(family-name:--font-display) text-[0.95rem] font-semibold text-(--color-text)">
+              {name}
+            </h3>
+            <p className="mt-0.5 line-clamp-2 text-xs text-(--color-muted)">
+              {description}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-auto flex flex-col gap-2">
+          {hasLive && (
+            <LinkRow
+              label="Live"
+              copyValue={liveCopyValue || liveUrl}
+              url={liveUrl}
+              copyLabel={`${name} live link`}
+            />
+          )}
+          {hasGithub && (
+            <LinkRow
+              label="GitHub"
+              copyValue={githubCopyValue || githubUrl}
+              url={githubUrl}
+              copyLabel={`${name} GitHub link`}
+            />
+          )}
+          {!hasLive && !hasGithub && (
+            <p className="text-xs text-(--color-muted)">No links added yet</p>
+          )}
+        </div>
+      </article>
+
+      {infoOpen && (
+        <ProjectInfoModal
+          project={project}
+          onClose={() => setInfoOpen(false)}
+        />
+      )}
+    </>
   );
 }
 
