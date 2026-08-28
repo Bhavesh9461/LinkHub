@@ -28,7 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://linkhub-ten-indol.vercel.app/"),
+  metadataBase: new URL("https://linkhub-ten-indol.vercel.app"),
 
   title: {
     default: config.siteName,
@@ -42,14 +42,14 @@ export const metadata = {
       { url: "/iconlogo.png", media: "(prefers-color-scheme: light)" },
       { url: "/iconlogo-dark.png", media: "(prefers-color-scheme: dark)" },
     ],
-    apple: "/iconlogo2.png",
-    shortcut: "/iconlogo2.png",
+    apple: "/iconlogo2.webp",
+    shortcut: "/iconlogo2.webp",
   },
 
   openGraph: {
     title: config.siteName,
     description: config.siteDescription,
-    url: "/",
+    url: "https://linkhub-ten-indol.vercel.app",
     siteName: config.siteName,
     images: [
       {
