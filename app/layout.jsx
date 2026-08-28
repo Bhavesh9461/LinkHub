@@ -54,8 +54,8 @@ export const metadata = {
     images: [
       {
         url: "/og-image.png",
-        width: 1086,
-        height: 1448,
+        width: 1200,
+        height: 630,
         alt: "Bhavesh Kumar",
       },
     ],
