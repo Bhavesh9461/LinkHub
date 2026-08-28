@@ -28,7 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://linkhub-jnbys3d9i-bhavesh-kumars-projects-039d2833.vercel.app/"),
+  metadataBase: new URL("https://linkhub-git-feature-metadata-bhavesh-kumars-projects-039d2833.vercel.app/"),
   manifest: "/manifest.webmanifest",
 
   title: {
