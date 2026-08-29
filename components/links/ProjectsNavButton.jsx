@@ -4,10 +4,10 @@ export default function ProjectsNavButton({ href }) {
   return (
     <Link
       href={href}
-      className="glass inline-flex h-10 items-center gap-2 rounded-(--radius-pill) px-4 text-sm font-medium text-(--color-text) transition-colors hover:border-(--color-blue) hover:text-(--color-blue)"
+      className="inline-flex h-9 items-center gap-1.5 rounded-(--radius-pill) border border-(--color-border) bg-(--color-surface-2) px-2.5 text-xs font-medium text-(--color-text) transition-colors hover:border-(--color-blue) hover:text-(--color-blue) sm:h-10 sm:gap-2 sm:px-4 sm:text-sm"
     >
       <i className="ri-folder-line text-base" aria-hidden="true" />
-      Projects
+      <span className="hidden sm:inline">Projects</span>
     </Link>
   );
 }

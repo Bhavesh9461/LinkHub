@@ -12,7 +12,7 @@ export default async function PrivateProjectsPage() {
     <main className="flex min-h-dvh flex-col">
       <PrivateLinksHeader backHref="/private-links" centerAction={<ManageLinksButton />} />
 
-      <div className="px-4 pb-2 pt-6 text-center sm:px-8">
+      <div className="px-4 pb-2 pt-0.5 text-center sm:px-8">
         <h1 className="font-(family-name:--font-display) text-xl font-semibold text-(--color-text)">
           Private Projects
         </h1>

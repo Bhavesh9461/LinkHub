@@ -4,7 +4,7 @@ import { profile } from "@/data/profile";
 
 export default function ProfileHeader() {
   return (
-    <section className="flex flex-col items-center gap-5 px-4 pb-8 pt-8 text-center sm:pt-10">
+    <section className="flex flex-col items-center gap-5 px-4 pb-8 pt-1 text-center sm:pt-1">
       <Avatar src={profile.avatarSrc} name={profile.name} online={profile.online} />
 
       <div className="flex flex-col items-center gap-2.5">

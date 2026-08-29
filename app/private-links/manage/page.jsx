@@ -291,12 +291,33 @@ export default function ManageLinksPage() {
             />
           </div>
 
-          <TextField
-            label="Description"
-            value={form.description}
-            onChange={handleChange("description")}
-            placeholder="Short description"
-          />
+          {form.kind === "project" ? (
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-(--color-muted)">
+                Description
+              </label>
+              <textarea
+                rows={4}
+                value={form.description}
+                onChange={handleChange("description")}
+                placeholder={
+                  "Write plainly, or as a numbered list:\n1. First point...\n2. Second point..."
+                }
+                className="w-full resize-y rounded-lg border border-(--color-border) bg-(--color-surface-2) px-3 py-2.5 text-sm text-(--color-text) outline-none transition-colors placeholder:text-(--color-muted)/60 focus:border-(--color-blue)"
+              />
+              <p className="mt-1 text-[0.7rem] text-(--color-muted)/70">
+                Type "1. ... 2. ..." (with or without line breaks) and it'll
+                show as a numbered list in the info popup.
+              </p>
+            </div>
+          ) : (
+            <TextField
+              label="Description"
+              value={form.description}
+              onChange={handleChange("description")}
+              placeholder="Short description"
+            />
+          )}
 
           {form.kind === "link" ? (
             <>

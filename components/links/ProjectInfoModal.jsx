@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { parseNumberedList } from "@/lib/parseNumberedList";
 
 export default function ProjectInfoModal({ project, onClose }) {
   useEffect(() => {
@@ -22,6 +23,7 @@ export default function ProjectInfoModal({ project, onClose }) {
 
   const formattedStart = formatDate(project.startDate);
   const formattedCompletion = formatDate(project.completionDate);
+  const listItems = parseNumberedList(project.description);
 
   return (
     <div
@@ -57,9 +59,17 @@ export default function ProjectInfoModal({ project, onClose }) {
           {project.description && (
             <div>
               <p className="mb-1 text-xs font-medium uppercase tracking-wide text-(--color-muted)">Description</p>
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-(--color-text)">
-                {project.description}
-              </p>
+              {listItems ? (
+                <ol className="list-inside list-decimal space-y-1.5 text-sm leading-relaxed text-(--color-text)">
+                  {listItems.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ol>
+              ) : (
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-(--color-text)">
+                  {project.description}
+                </p>
+              )}
             </div>
           )}
 
