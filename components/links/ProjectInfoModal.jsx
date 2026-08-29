@@ -39,7 +39,7 @@ export default function ProjectInfoModal({ project, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="project-info-title"
-        className="glass flex w-full max-w-md flex-col rounded-t-2xl rounded-b-none shadow-2xl sm:max-h-[80vh] sm:w-[calc(100%-2rem)] sm:rounded-(--radius-card) sm:rounded-b-2xl"
+        className="glass flex w-full max-w-md flex-col rounded-(--radius-card) shadow-2xl sm:max-h-[80vh] sm:w-[calc(100%-2rem)] overflow-hidden"
       >
         <div className="flex items-center justify-between border-b border-(--color-border) px-5 py-4">
           <h2
@@ -58,7 +58,7 @@ export default function ProjectInfoModal({ project, onClose }) {
           </button>
         </div>
 
-        <div className="flex max-h-[70vh] flex-col gap-4 overflow-y-auto overflow-x-hidden px-5 py-4">
+        <div className="modal-scrollbar flex max-h-[70vh] flex-col gap-4 overflow-y-auto overflow-x-hidden py-4 pl-5 pr-3">
           {project.description && (
             <div className="min-w-0">
               <p className="mb-1 text-xs font-medium uppercase tracking-wide text-(--color-muted)">
