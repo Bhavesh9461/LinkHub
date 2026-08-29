@@ -61,11 +61,11 @@ export default function ProjectInfoModal({ project, onClose }) {
         <div className="modal-scrollbar flex max-h-[70vh] flex-col gap-4 overflow-y-auto overflow-x-hidden py-4 pl-5 pr-3">
           {project.description && (
             <div className="min-w-0">
-              <p className="mb-1 text-xs font-medium uppercase tracking-wide text-(--color-muted)">
+              <p className="mb-1 text-sm font-medium uppercase tracking-wide text-(--color-muted)">
                 Description
               </p>
               {listItems ? (
-                <ol className="list-inside list-decimal space-y-1.5 break-words text-sm leading-relaxed text-(--color-text)">
+                <ol className="list-inside list-decimal space-y-3 break-words leading-relaxed text-(--color-text)">
                   {listItems.map((item, i) => (
                     <li key={i} className="break-words">
                       {item}
@@ -82,10 +82,10 @@ export default function ProjectInfoModal({ project, onClose }) {
 
           {memberList.length > 0 && (
             <div className="min-w-0">
-              <p className="mb-1 text-xs font-medium uppercase tracking-wide text-(--color-muted)">
+              <p className="mb-1 text-sm font-medium uppercase tracking-wide text-(--color-muted)">
                 {memberList.length === 1 ? "Member" : "Members"}
               </p>
-              <p className="break-words text-sm text-(--color-text)">
+              <p className="break-words text-(--color-text)">
                 {memberList.join(", ")}
               </p>
             </div>
@@ -95,10 +95,10 @@ export default function ProjectInfoModal({ project, onClose }) {
             <div className="grid grid-cols-2 gap-4">
               {formattedStart && (
                 <div className="min-w-0">
-                  <p className="mb-1 text-xs font-medium uppercase tracking-wide text-(--color-muted)">
+                  <p className="mb-1 text-sm font-medium uppercase tracking-wide text-(--color-muted)">
                     Started
                   </p>
-                  <p className="break-words text-sm text-(--color-text)">
+                  <p className="break-words text-(--color-text)">
                     {formattedStart}
                   </p>
                 </div>
