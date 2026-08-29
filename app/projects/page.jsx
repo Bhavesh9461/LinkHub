@@ -9,17 +9,18 @@ export default async function ProjectsPage() {
 
   return (
     <main className="flex min-h-dvh flex-col">
-      <header className="flex items-center px-4 pt-5 sm:px-8 sm:pt-8">
+      <header className="glass-nav fixed inset-x-0 top-0 z-40 flex h-14 items-center px-4 sm:h-16 sm:px-8">
         <Link
           href="/"
-          className="glass inline-flex h-10 items-center gap-2 rounded-(--radius-pill) px-4 text-sm text-(--color-text)"
+          className="inline-flex h-9 items-center gap-1.5 rounded-(--radius-pill) border border-(--color-border) bg-(--color-surface-2) px-2.5 text-xs text-(--color-text) sm:h-10 sm:gap-2 sm:px-4 sm:text-sm"
         >
           <i className="ri-arrow-left-line" aria-hidden="true" />
-          Back
+          <span className="hidden sm:inline">Back</span>
         </Link>
       </header>
+      <div className="h-20 sm:h-24" aria-hidden="true" />
 
-      <div className="px-4 pb-2 pt-6 text-center sm:px-8">
+      <div className="px-4 pb-2 text-center sm:px-8">
         <h1 className="font-(family-name:--font-display) text-xl font-semibold text-(--color-text)">Projects</h1>
       </div>
 

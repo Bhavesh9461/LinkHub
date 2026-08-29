@@ -22,6 +22,9 @@ const emptyForm = {
   liveCopyValue: "",
   githubUrl: "",
   githubCopyValue: "",
+  members: "",
+  startDate: "",
+  completionDate: "",
   show: true,
   visibility: "public",
   iconType: "none",
@@ -80,6 +83,9 @@ export default function ManageLinksPage() {
       liveCopyValue: link.liveCopyValue || "",
       githubUrl: link.githubUrl || "",
       githubCopyValue: link.githubCopyValue || "",
+      members: link.members || "",
+      startDate: link.startDate || "",
+      completionDate: link.completionDate || "",
       show: link.show,
       visibility: link.visibility,
       iconType: link.iconType || "none",
@@ -285,12 +291,33 @@ export default function ManageLinksPage() {
             />
           </div>
 
-          <TextField
-            label="Description"
-            value={form.description}
-            onChange={handleChange("description")}
-            placeholder="Short description"
-          />
+          {form.kind === "project" ? (
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-(--color-muted)">
+                Description
+              </label>
+              <textarea
+                rows={4}
+                value={form.description}
+                onChange={handleChange("description")}
+                placeholder={
+                  "Write plainly, or as a numbered list:\n1. First point...\n2. Second point..."
+                }
+                className="w-full resize-y rounded-lg border border-(--color-border) bg-(--color-surface-2) px-3 py-2.5 text-sm text-(--color-text) outline-none transition-colors placeholder:text-(--color-muted)/60 focus:border-(--color-blue)"
+              />
+              <p className="mt-1 text-[0.7rem] text-(--color-muted)/70">
+                Type "1. ... 2. ..." (with or without line breaks) and it'll
+                show as a numbered list in the info popup.
+              </p>
+            </div>
+          ) : (
+            <TextField
+              label="Description"
+              value={form.description}
+              onChange={handleChange("description")}
+              placeholder="Short description"
+            />
+          )}
 
           {form.kind === "link" ? (
             <>
@@ -319,7 +346,7 @@ export default function ManageLinksPage() {
           ) : (
             <div className="flex flex-col gap-4 rounded-lg border border-(--color-border) p-4">
               <p className="text-xs font-medium text-(--color-muted)">
-                Both groups below are optional
+                Project Info (github url and live url are optional)
               </p>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -350,6 +377,38 @@ export default function ManageLinksPage() {
                   onChange={handleChange("githubCopyValue")}
                   placeholder="Defaults to GitHub URL if left blank"
                 />
+              </div>
+
+              <TextField
+                label="Members"
+                value={form.members}
+                onChange={handleChange("members")}
+                placeholder="e.g. bhavesh, gautam"
+              />
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-(--color-muted)">
+                    Start date
+                  </label>
+                  <input
+                    type="date"
+                    value={form.startDate}
+                    onChange={handleChange("startDate")}
+                    className="h-(--size-btn-h) w-full rounded-lg border border-(--color-border) bg-(--color-surface-2) px-3 text-sm text-(--color-text) outline-none transition-colors focus:border-(--color-blue) [color-scheme:dark]"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-(--color-muted)">
+                    Completion date
+                  </label>
+                  <input
+                    type="date"
+                    value={form.completionDate}
+                    onChange={handleChange("completionDate")}
+                    className="h-(--size-btn-h) w-full rounded-lg border border-(--color-border) bg-(--color-surface-2) px-3 text-sm text-(--color-text) outline-none transition-colors focus:border-(--color-blue) [color-scheme:dark]"
+                  />
+                </div>
               </div>
             </div>
           )}
